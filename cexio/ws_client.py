@@ -180,7 +180,7 @@ class CommonWebSocketClient:
 			logger.info("{} (\'{}\') while connecting".format(ex.__class__.__name__, ex))
 			try:
 				if self.ws is not None:
-					await wait_for(self.ws.close_connection(force=True), self._timeout)
+					await wait_for(self.ws.close_connection(), self._timeout)
 			except Exception as ex1:
 				logger.error("Exception at close_connection: {}".format(ex1))
 			raise ex
