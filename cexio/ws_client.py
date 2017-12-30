@@ -270,7 +270,7 @@ class CommonWebSocketClient:
 	async def _authorize(self):
 		await self._send(self._auth.get_request())
 		response = await self.recv()
-		if message_equal(response, {'e': 'auth', 'ok': 'ok', 'data': {'ok': 'ok'}, }):
+		if message_equal_or_greater(response, {'e': 'auth', 'ok': 'ok', 'data': {'ok': 'ok'}, }):
 			logger.info('WS> User Authorized')
 
 		elif message_equal(response, {'e': 'auth', 'ok': 'error', 'data': {'error': None}, }):
