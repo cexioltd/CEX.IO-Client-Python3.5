@@ -31,8 +31,6 @@ __all__ = [
 
 
 logger = logging.getLogger(__name__)
-logger.level = logging.DEBUG
-logger.addHandler(logging.StreamHandler(sys.stdout))
 
 
 # Assert that required algorithm implemented

@@ -33,7 +33,6 @@ __all__ = [
 
 
 logger = logging.getLogger(__name__)
-logger.level = logging.DEBUG
 
 
 class CallChain(object):
@@ -347,12 +346,3 @@ if __name__ == "__main__":
 	pass
 else:
 	pass
-
-
-
-
-
-
-
-
-
