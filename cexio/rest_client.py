@@ -102,13 +102,13 @@ class CEXRestClient:
 		url = self._uri + resource
 		logger.debug("REST.Post> {}".format(url))
 
-		with aiohttp.ClientSession() as session:
+		async with aiohttp.ClientSession() as session:
 			if self._need_auth:
 				params.update(self._auth.get_params())
 
 			async with session.post(url, data=params) as response:
 				self._validate(url, response)
-				response = await response.json()
+				response = await response.json(content_type='text/json')
 				logger.debug("REST.Resp> {}".format(response))
 				return response
 
