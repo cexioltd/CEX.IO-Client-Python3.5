@@ -114,13 +114,13 @@ class CEXRestClient:
 	def _validate(url, response):
 		if response.status != 200:
 			error = "Error response code {}: {} at: {}".format(response.status, response.reason, url)
-			logger.debug(error)
+			logger.error(error)
 			raise InvalidResponseError(error)
 
 		content_type = response.headers['CONTENT-TYPE']
 		if content_type != 'text/json':
 			error = "Invalid response content-type \'{}\' of: {}".format(content_type, url)
-			logger.debug(error)
+			logger.error(error)
 			raise InvalidResponseError(error)
 
 
