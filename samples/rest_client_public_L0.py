@@ -7,9 +7,14 @@ from cexio.rest_client import *
 from config.my_config import config
 
 
+log_level = config.get('log_level', 'DEBUG')
 logger = logging.getLogger(__name__)
-logger.level = logging.DEBUG
+logger.setLevel(log_level)
 logger.addHandler(logging.StreamHandler(sys.stdout))
+
+ws_client_logger = logging.getLogger('cexio.rest_client')
+ws_client_logger.setLevel(log_level)
+ws_client_logger.addHandler(logging.StreamHandler(sys.stdout))
 
 
 if __name__ == "__main__":

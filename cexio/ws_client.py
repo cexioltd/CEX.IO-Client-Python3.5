@@ -31,8 +31,6 @@ __all__ = [
 
 
 logger = logging.getLogger(__name__)
-logger.level = logging.DEBUG
-logger.addHandler(logging.StreamHandler(sys.stdout))
 
 
 # Assert that required algorithm implemented
@@ -180,7 +178,7 @@ class CommonWebSocketClient:
 			logger.info("{} (\'{}\') while connecting".format(ex.__class__.__name__, ex))
 			try:
 				if self.ws is not None:
-					await wait_for(self.ws.close_connection(force=True), self._timeout)
+					await wait_for(self.ws.close_connection(), self._timeout)
 			except Exception as ex1:
 				logger.error("Exception at close_connection: {}".format(ex1))
 			raise ex
@@ -270,7 +268,7 @@ class CommonWebSocketClient:
 	async def _authorize(self):
 		await self._send(self._auth.get_request())
 		response = await self.recv()
-		if message_equal(response, {'e': 'auth', 'ok': 'ok', 'data': {'ok': 'ok'}, }):
+		if message_equal_or_greater(response, {'e': 'auth', 'ok': 'ok', 'data': {'ok': 'ok'}, }):
 			logger.info('WS> User Authorized')
 
 		elif message_equal(response, {'e': 'auth', 'ok': 'error', 'data': {'error': None}, }):

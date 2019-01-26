@@ -14,8 +14,6 @@ from cexio.exceptions import *
 
 
 logger = logging.getLogger(__name__)
-logger.level = logging.DEBUG
-logger.addHandler(logging.StreamHandler(sys.stdout))
 
 
 __all__ = [
@@ -91,10 +89,10 @@ class CEXRestClient:
 		url = self._uri + resource
 		logger.debug("REST.Get> {}".format(url))
 
-		with aiohttp.ClientSession() as session:
+		async with aiohttp.ClientSession() as session:
 			async with session.get(url, headers=headers) as response:
 				self._validate(url, response)
-				response = await response.json()
+				response = await response.json(content_type='text/json')
 				logger.debug("REST.Resp> Response: {}".format(response))
 				return response
 
@@ -102,13 +100,13 @@ class CEXRestClient:
 		url = self._uri + resource
 		logger.debug("REST.Post> {}".format(url))
 
-		with aiohttp.ClientSession() as session:
+		async with aiohttp.ClientSession() as session:
 			if self._need_auth:
 				params.update(self._auth.get_params())
 
 			async with session.post(url, data=params) as response:
 				self._validate(url, response)
-				response = await response.json()
+				response = await response.json(content_type='text/json')
 				logger.debug("REST.Resp> {}".format(response))
 				return response
 
@@ -116,13 +114,13 @@ class CEXRestClient:
 	def _validate(url, response):
 		if response.status != 200:
 			error = "Error response code {}: {} at: {}".format(response.status, response.reason, url)
-			logger.debug(error)
+			logger.error(error)
 			raise InvalidResponseError(error)
 
 		content_type = response.headers['CONTENT-TYPE']
 		if content_type != 'text/json':
 			error = "Invalid response content-type \'{}\' of: {}".format(content_type, url)
-			logger.debug(error)
+			logger.error(error)
 			raise InvalidResponseError(error)
 
 
